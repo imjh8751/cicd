@@ -1,0 +1,99 @@
+pipeline {
+    agent any
+
+    // 1. 문자열 매개변수
+    parameters {
+        // 문자열 매개변수
+        string(name: 'PARAMETER_NAME', defaultValue: '', description: 'Enter a string value')
+
+        // Boolean 매개변수
+        booleanParam(name: 'FLAG', defaultValue: false, description: 'Set a boolean flag')
+
+        // Choice 매개변수
+        choice(name: 'FRUIT', choices: ['Apple', 'Banana', 'Orange'], description: 'Select a fruit')
+
+        // 파라미터의 선택적 사용
+        // 파라미터를 선택적으로 사용하고 싶을 때는 `optional` 옵션을 사용합니다.
+        //string(name: 'OPTIONAL_PARAM', defaultValue: '', description: 'Optional parameter', optional: true)
+        
+        string(name: 'STR_PARAM', defaultValue: 'Default Value', description: 'This is a string parameter')
+    
+        
+        // 문자열 매개변수
+        string(name: 'PARAMETER_STRING', defaultValue: 'default value', description: 'This is a string parameter')
+        
+        // 선택 매개변수
+        choice(name: 'PARAMETER_CHOICE', choices: ['option1', 'option2', 'option3'], description: 'This is a choice parameter')
+        
+        // Boolean 매개변수
+        booleanParam(name: 'PARAMETER_BOOLEAN', defaultValue: true, description: 'This is a boolean parameter')
+        
+        // 파일 매개변수
+        file(name: 'PARAMETER_FILE', description: 'This is a file parameter')
+        
+        // Credential 매개변수
+        credentials(name: 'PARAMETER_CREDENTIALS', defaultValue: '', description: 'This is a credentials parameter')
+    }
+
+    stages {
+        stage('Example1') {
+            steps {
+                // 매개변수 사용
+                script {
+                    // 문자열 매개변수 사용
+                    def paramValue = params.PARAMETER_NAME
+                    echo "The parameter value is: ${paramValue}"
+
+                    // Boolean 매개변수 사용
+                    def flagValue = params.FLAG
+                    echo "The flag value is: ${flagValue}"
+
+                    // Choice 매개변수 사용
+                    def fruitValue = params.FRUIT
+                    echo "The selected fruit is: ${fruitValue}"
+
+                    // 선택적 매개변수 사용
+                    if (params.OPTIONAL_PARAM) {
+                        def optionalParamValue = params.OPTIONAL_PARAM
+                        echo "The optional parameter value is: ${optionalParamValue}"
+                    }
+                }
+            }
+        }
+        
+        stage('Example2') {
+            steps {
+                script {
+                    // 2. 매개변수 사용하기
+                    echo "String parameter value: ${params.STR_PARAM}"
+                    
+                    // 3. 매개변수로 조건문 사용하기
+                    if (params.STR_PARAM == 'Special Value') {
+                        echo "The parameter value is special"
+                    } else {
+                        echo "The parameter value is not special"
+                    }
+                }
+            }
+        }
+        
+        stage('Example3') {
+            steps {
+                // 문자열 매개변수 사용
+                echo "String parameter value: ${params.PARAMETER_STRING}"
+                
+                // 선택 매개변수 사용
+                echo "Choice parameter value: ${params.PARAMETER_CHOICE}"
+                
+                // Boolean 매개변수 사용
+                echo "Boolean parameter value: ${params.PARAMETER_BOOLEAN}"
+                
+                // 파일 매개변수 사용
+                echo "File parameter value: ${params.PARAMETER_FILE}"
+                
+                // Credential 매개변수 사용
+                echo "Credentials parameter value: ${params.PARAMETER_CREDENTIALS}"
+            }
+        }
+    }
+}
